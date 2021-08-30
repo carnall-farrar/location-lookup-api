@@ -4,6 +4,7 @@ from flask.helpers import get_root_path
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
+
 import os
 from os import environ
 import logging
@@ -28,10 +29,7 @@ def create_app():
 
     # Meta tags for viewport responsiveness
     register_extensions(server)
-
-    @server.route('/', methods=['GET', 'POST'])
-    def hello():
-        return 'Hello world!'
+    register_blueprints(server)
 
     return server
 
@@ -40,6 +38,12 @@ def register_extensions(server):
 
     db.init_app(server)
     migrate.init_app(server, db)
+
+
+def register_blueprints(server):
+    from .routes import server_bp
+
+    server.register_blueprint(server_bp)
 
 
 if __name__ == '__main__':
