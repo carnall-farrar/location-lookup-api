@@ -1,6 +1,6 @@
 from sqlalchemy.sql import func
 from app import db
-from app.api.location.models import CcgToStpLookup
+from app.api.location.models import CcgToStpLookup, Words
 
 def create_lookup(
     ccg_code,
@@ -80,6 +80,10 @@ def search_lookup(search_query):
         print(res)
     
     return results
+
+
+def read_words():
+    return Words.query.all()
 
 
 def update_lookup():

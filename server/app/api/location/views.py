@@ -4,6 +4,7 @@ from flask_restx import Resource, fields, Namespace
 from app.api.location.crud import (
     search_lookup,
     read_lookups,
+    read_words,
     read_lookup_by_id,
     read_lookup_by_ccg_code,
     read_lookup_by_stp_code,
@@ -38,6 +39,13 @@ location_search = location_namespace.inherit(
     }
 )
 
+location_word = location_namespace.model(
+    "LocationWord",
+    {
+        "word": fields.String(required=True)
+    }
+)
+
 
 class Location(Resource):
     @location_namespace.marshal_with(location)
@@ -50,6 +58,14 @@ class Location(Resource):
             location_namespace.abort(404, f"Location {location_id} does not exist")
         return location, 200
 
+
+class LocationList(Resource):
+    @location_namespace.marshal_with(location, as_list=True)
+    @location_namespace.response(200, "Success")
+    @location_namespace.response(404, "No Locations Found")
+    def get(self):
+        """Returns all locations in DB"""
+        return read_lookups(), 200
 
 class LocationSearch(Resource):
     @location_namespace.marshal_with(location_search, as_list=True)
@@ -83,5 +99,13 @@ class LocationSearch(Resource):
         return results, 200
 
 
-location_namespace.add_resource(LocationSearch, "")
+class LocationSearchWords(Resource):
+    @location_namespace.marshal_with(location_word, as_list=True)
+    def get(self):
+        return read_words(), 200
+
+
+location_namespace.add_resource(LocationList, "")
+location_namespace.add_resource(LocationSearchWords, "/words")
+location_namespace.add_resource(LocationSearch, "/search")
 location_namespace.add_resource(Location, "/<int:location_id>")
