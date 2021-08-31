@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: app
+    entrypoint: ['/usr/src/app/entrypoint.sh']
+    volumes:
+      - './server/:/usr/src/app'
+    ports:
+      - 5001:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=app.config.DevelopmentConfig
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/location_dev
+      - DATABASE_TEST_URL=postgresql://postgres:postgres@db:5432/location_test
+    depends_on:
+      - db
+
+  db:
+    build:
+      context: ./server/app/db
+      dockerfile: Dockerfile
+    container_name: db
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  # client:
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   container_name: client
+  #   volumes:
+  #     - './client/:/usr/src/app'
+  #     - '/usr/src/app/node_modules'
+  #   ports:
+  #     - 3007:3000
+  #   environment:
+  #     - NODE_ENV=development
+  #     - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
+  #   depends_on:
+  #     - app
+  #   stdin_open: true
