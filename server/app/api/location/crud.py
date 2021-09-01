@@ -46,19 +46,6 @@ def read_lookup_by_region_code(region_code):
 
 
 def search_lookup(search_query):
-    """
-    search_query = request.args.get('search')
-    search_query = search_query.replace(" ", "&")
-    search_query = search_query.replace("+", "&")
-    shows = db.session.query(
-        Show.id,
-        Show.title,
-        Show.description,
-        func.ts_rank_cd(Show.tsv_searchable_text, func.plainto_tsquery(search_query, postgresql_regconfig='english'), 32).label('rank')
-    ).filter(
-        Show.tsv_searchable_text.match(search_query, postgresql_regconfig='english')
-    ).order_by(db.text('rank DESC')).limit(10)
-    """
     
     results = db.session.query(
         CcgToStpLookup.id,
@@ -75,9 +62,6 @@ def search_lookup(search_query):
     ).filter(
         CcgToStpLookup.tsv_searchable_text.match(search_query, postgresql_regconfig='english')
     ).order_by(db.text('rank DESC')).limit(10)
-
-    for res in results:
-        print(res)
     
     return results
 

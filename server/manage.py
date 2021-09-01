@@ -3,6 +3,7 @@ import sys
 from flask.cli import FlaskGroup
 
 from app import create_app, db
+from app.logger import logger
 from app.api.location.models import CcgToStpLookup, Words
 
 
@@ -37,7 +38,7 @@ def add_ccg_lookup():
                 region_name=split[12].strip(),
                 file=split[5].strip()
             )
-            print(row)
+            logger.info(row)
 
 
 @cli.command('add_words')
@@ -58,7 +59,7 @@ def add_words():
     """)
     db.session.execute(add_words_snippet)
     db.session.commit()
-    print("Words added")
+    logger.info("Words added")
 
 if __name__ == '__main__':
     cli()

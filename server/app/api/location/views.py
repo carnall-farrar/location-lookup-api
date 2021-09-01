@@ -1,6 +1,7 @@
 from flask import request
 from flask_restx import Resource, fields, Namespace
 
+from app.logger import logger
 from app.api.location.crud import (
     search_lookup,
     read_lookups,
@@ -73,12 +74,11 @@ class LocationSearch(Resource):
     @location_namespace.response(404, "No Locations Match")
     def get(self):
         """Returns a list of locations to match search param."""
-        search_query = request.args.get('search')
+        search_query = request.args.get('query')
         search_query = search_query.replace(" ", "&")
         search_query = search_query.replace("+", "&")
-        print(search_query)
+        logger.debug(search_query)
         location_results = search_lookup(search_query)
-        print(f"RESPONSE: {location_results}")
         if not location_results:
             location_namespace.abort(404, f"No Locations Match")
         results = []
