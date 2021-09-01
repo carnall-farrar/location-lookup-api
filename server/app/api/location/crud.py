@@ -1,6 +1,7 @@
 from sqlalchemy.sql import func
 from app import db
 from app.api.location.models import CcgToStpLookup, Words
+from app.logger import logger
 
 def create_lookup(
     ccg_code,
@@ -66,8 +67,34 @@ def search_lookup(search_query):
     return results
 
 
-def read_words():
-    return Words.query.all()
+def read_words(search_query):
+
+    # words = db.session.query(
+    #     Words.word,
+    #     db.text(f'similarity({Words.word}, {search_query})').label('similarity')
+    # ).filter(
+    #     db.text(f'similarity({Words.word}, {search_query})') >= 0.3
+    # ).order_by(db.text('similarity DESC')).limit(5)
+
+    words_object = db.session.execute(
+        db.text(f"""
+            SELECT word, similarity(word, '{search_query}') AS similarity
+            FROM words
+            WHERE similarity(word, '{search_query}') >= 0.3
+            ORDER BY similarity DESC;
+        """)
+    )
+
+    words_result = []
+    
+    for r in words_object:
+        logger.debug(f"result_object: {r}")
+        word = r[0]
+        words_result.append(word)
+
+    logger.debug(words_result)
+
+    return words_result
 
 
 def update_lookup():

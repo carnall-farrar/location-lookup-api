@@ -61,5 +61,18 @@ def add_words():
     db.session.commit()
     logger.info("Words added")
 
+
+@cli.command('add_words_index')
+def add_words_index():
+    add_words_index_snippet = db.DDL("""
+        CREATE EXTENSION pg_trgm;
+        CREATE INDEX IF NOT EXISTS location_search_word_trigram_index
+                ON words
+             USING gin (word gin_trgm_ops);
+    """)
+    db.session.execute(add_words_index_snippet)
+    db.session.commit()
+    logger.info("Words index added")
+
 if __name__ == '__main__':
     cli()

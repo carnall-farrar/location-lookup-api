@@ -102,7 +102,12 @@ class LocationSearch(Resource):
 class LocationSearchWords(Resource):
     @location_namespace.marshal_with(location_word, as_list=True)
     def get(self):
-        return read_words(), 200
+        search_query = request.args.get('query')
+        logger.debug(f"Word Query: {search_query}")
+        words = read_words(search_query)
+        result = [{"word": word} for word in words]
+
+        return result, 200
 
 
 location_namespace.add_resource(LocationList, "")
