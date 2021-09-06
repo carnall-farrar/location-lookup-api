@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { sanitize } from 'dompurify';
 import { Card, Table } from 'react-bootstrap';
 
 function ResultList ({ results }) {
@@ -8,13 +7,11 @@ function ResultList ({ results }) {
     <Card className='mb-3' key={result.id}>
       <Card.Body>
         <Card.Title>{result.ccg_name}</Card.Title>
-        <Card.Subtitle className='mb-2 text-muted'>
-          CCG Code: {result.ccg_code} | STP Code: {result.stp_code} | Region Code: {result.region_code}
-        </Card.Subtitle>
         <Card.Text>
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
+                <th></th>
                 <th>Code</th>
                 <th>Name</th>
                 <th>CDH</th>
@@ -22,16 +19,19 @@ function ResultList ({ results }) {
             </thead>
             <tbody>
               <tr>
+                <td><strong>CCG</strong></td>
                 <td>{result.ccg_code}</td>
                 <td>{result.ccg_name}</td>
                 <td></td>
               </tr>
               <tr>
+                <td><strong>STP</strong></td>
                 <td>{result.stp_code}</td>
                 <td>{result.stp_name}</td>
                 <td>{result.stp_cdh}</td>
               </tr>
               <tr>
+                <td><strong>Region</strong></td>
                 <td>{result.region_code}</td>
                 <td>{result.region_name}</td>
                 <td>{result.region_cdh}</td>

@@ -14,12 +14,12 @@ services:
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=app.config.DevelopmentConfig
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/location_dev
-      - DATABASE_TEST_URL=postgresql://postgres:postgres@db:5432/location_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
 
-  db:
+  postgres:
     build:
       context: ./server/app/db
       dockerfile: Dockerfile

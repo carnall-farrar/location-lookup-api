@@ -11,18 +11,24 @@ class BaseConfig:
 
 
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    postgres_user = os.environ.get("POSTGRES_USER")
+    postgres_password = os.environ.get("POSTGRES_PASSWORD")
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{postgres_user}:{postgres_password}@postgres:5432/location_dev"
     BCRYPT_LOG_ROUNDS = 4
 
 
 class TestingConfig(BaseConfig):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_TEST_URL")
+    postgres_user = os.environ.get("POSTGRES_USER")
+    postgres_password = os.environ.get("POSTGRES_PASSWORD")
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{postgres_user}:{postgres_password}@postgres:5432/location_test"
     BCRYPT_LOG_ROUNDS = 4
     ACCESS_TOKEN_EXPIRATION = 3
     REFRESH_TOKEN_EXPIRATION = 3
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    postgres_user = os.environ.get("POSTGRES_USER")
+    postgres_password = os.environ.get("POSTGRES_PASSWORD")
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{postgres_user}:{postgres_password}@postgres:5432/location_dev"
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious")
