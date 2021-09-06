@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, Table } from 'react-bootstrap';
+import { Card, Table, Badge } from 'react-bootstrap';
 
 function ResultList ({ results }) {
   const resultItems = results.map(result =>

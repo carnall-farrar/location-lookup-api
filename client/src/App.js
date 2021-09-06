@@ -33,14 +33,17 @@ function App () {
       <p className='lead'>
         Use the controls below to peruse the NHS location catalog and filter the results.
       </p>
-      <Row>
-        <Col lg={4}>
-          <Search search={search} />
-        </Col>
-        <Col lg={8}>
+      <Col>
+        <Row lg={4}>
+          <Col></Col>
+          <Col lg={6}><Search search={search} /></Col>
+          <Col></Col>
+        </Row>
+        <br></br>
+        <Row lg={8}>
           <ResultList results={results}/>
-        </Col>
-      </Row>
+        </Row>
+      </Col>
     </Container>
   );
 }
