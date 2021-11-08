@@ -54,7 +54,7 @@ function App () {
             <ul style={{marginTop: '15px', listStyleType:'none'}}>
               <li style={{cursor:'pointer', color:'#5C7080'}} id='ccg-lookup'>CCG lookup</li>
             </ul>
-            <span style={{color:'lightgray'}}>More data will be added here in due course</span>
+            <span style={{color:'lightgray'}}>More datasets will be added here in due course</span>
           </div>
         </Card>
         <Card sx={{width: '80%'}}>

@@ -88,7 +88,7 @@ export const MainTable = ({
                   key={column.id}
                   align="left"
                   style={{
-                    borderBottom: "1pt solid #0E5A8A",
+                    borderBottom: "1pt solid #E30B9E",
                     fontWeight: "bold",
                   }}
                 >
