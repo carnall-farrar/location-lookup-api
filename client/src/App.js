@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import './App.css';
 
 import ResultList from './components/ResultList';
 import Search from './components/Search';
+import { MainTable } from './components/Table';
 import { NavBar } from './components/NavBar';
 import Card from '@mui/material/Card';
 
@@ -27,6 +28,17 @@ function App () {
     }
   };
 
+  const [tableData, setTableData] = useState({data:[], cols:[]});
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_LOCATION_SERVICE_URL}/location`)
+        .then((response) => {
+          const columns = Object.keys(response.data[0]);
+          setTableData({data: response.data, cols: columns})
+        })
+  }, []);
+
+  console.log(tableData)
+
   return (
     <div
       style={{
@@ -47,6 +59,7 @@ function App () {
         </Card>
         <Card sx={{width: '80%'}}>
           <Search search={search} />
+          <MainTable data={tableData.data} cols={tableData.cols}/>
           <ResultList results={results}/>
         </Card>
       </div>

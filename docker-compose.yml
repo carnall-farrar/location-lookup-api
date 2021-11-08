@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   app:
@@ -6,11 +6,11 @@ services:
       context: ./server
       dockerfile: Dockerfile
     container_name: app
-    entrypoint: ['/usr/src/app/entrypoint.sh']
+    entrypoint: ["/usr/src/app/entrypoint.sh"]
     volumes:
-      - './server/:/usr/src/app'
+      - "./server/:/usr/src/app"
     ports:
-      - 5001:5000
+      - 5002:5000
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=app.config.DevelopmentConfig
@@ -36,8 +36,8 @@ services:
       dockerfile: Dockerfile
     container_name: client
     volumes:
-      - './client/:/usr/src/app'
-      - '/usr/src/app/node_modules'
+      - "./client/:/usr/src/app"
+      - "/usr/src/app/node_modules"
     ports:
       - 3007:3000
     environment:
@@ -45,4 +45,4 @@ services:
       - REACT_APP_LOCATION_SERVICE_URL=${REACT_APP_LOCATION_SERVICE_URL}
     depends_on:
       - app
-    command: [ "npm", "start" ]
+    command: ["npm", "start"]
