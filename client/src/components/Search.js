@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import axios from 'axios';
 import { Formik } from 'formik';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 
 function Search ({ search }) {
@@ -28,7 +28,7 @@ function Search ({ search }) {
             } catch(error) {
                 console.error(error);
                 setOptions([]);
-            } finally {
+            } finally { 
                 setLoading(false);
             }
         }
@@ -53,10 +53,8 @@ function Search ({ search }) {
             setFieldValue,
             values
         }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-            <Form.Group controlId='query'>
-                    <Form.Label>Query</Form.Label>
-                    <Col>
+            <Form noValidate onSubmit={handleSubmit} style={{display:'flex', flexDirection:'row'}}>
+            <Form.Group controlId='query' style={{width:'100%'}}>
                         <AsyncTypeahead
                             filterBy={() => true}
                             id="query"
@@ -74,15 +72,9 @@ function Search ({ search }) {
                             type="text"
                             value={values.query}
                         />
-                        <Form.Text className='text-muted'>
-                            Searches for location in NHS location lookup
-                        </Form.Text>
-                    </Col>
-                </Form.Group>
-            <Form.Group as={Row}>
-                <Col>
-                <Button type='submit' variant='primary'>Search</Button>
-                </Col>
+            </Form.Group>
+            <Form.Group>
+                <Button type='submit' style={{backgroundColor:'#26B0B2', border:'thin solid #26B0B2'}}>Search</Button>
             </Form.Group>
             </Form>
         )}

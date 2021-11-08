@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import './App.css';
 
-import { Col, Container, Row } from 'react-bootstrap';
-
 import ResultList from './components/ResultList';
 import Search from './components/Search';
+import { MainTable } from './components/Table';
+import { NavBar } from './components/NavBar';
+import Card from '@mui/material/Card';
 
 function App () {
 
@@ -27,24 +28,42 @@ function App () {
     }
   };
 
+  const [tableData, setTableData] = useState({data:[], cols:[]});
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_LOCATION_SERVICE_URL}/location`)
+        .then((response) => {
+          const columns = Object.keys(response.data[0]);
+          setTableData({data: response.data, cols: columns})
+        })
+  }, []);
+
+  console.log(tableData)
+
   return (
-    <Container className='pt-3'>
-      <h1>Location Lookup</h1>
-      <p className='lead'>
-        Use the controls below to peruse the NHS location catalog and filter the results.
-      </p>
-      <Col>
-        <Row lg={4}>
-          <Col></Col>
-          <Col lg={6}><Search search={search} /></Col>
-          <Col></Col>
-        </Row>
-        <br></br>
-        <Row lg={8}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <NavBar/>
+      <div style={{width:'85%', margin:'auto', marginTop: '2%', display:'flex'}}>
+        <Card sx={{width: '20%', marginRight: '10px', height: "90vh"}}>
+          <div style={{marginLeft:'15px', marginTop:'20px'}}>
+            <span style={{color:'#26B0B2', fontWeight:'bold'}}>Select dataset</span>
+            <ul style={{marginTop: '15px', listStyleType:'none'}}>
+              <li style={{cursor:'pointer', color:'#5C7080'}} id='ccg-lookup'>CCG lookup</li>
+            </ul>
+            <span style={{color:'lightgray'}}>More data will be added here in due course</span>
+          </div>
+        </Card>
+        <Card sx={{width: '80%'}}>
+          <Search search={search} />
+          <MainTable data={tableData.data} cols={tableData.cols}/>
           <ResultList results={results}/>
-        </Row>
-      </Col>
-    </Container>
+        </Card>
+      </div>
+    </div>
   );
 }
 
