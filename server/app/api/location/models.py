@@ -7,7 +7,7 @@ class CcgToStpLookup(db.Model):
 
     __tablename__ = "ccg_lookup"
 
-    __table_args__ = (db.Index('tsv_idx', 'tsv_searchable_text', postgresql_using = 'gin'),)
+    __table_args__ = (db.Index('tsv_idx', 'tsv_searchable_text', postgresql_using='gin'),)
 
     id = db.Column(db.Integer, primary_key=True)
     ccg_code = db.Column(db.String(50), nullable=False)
@@ -37,17 +37,17 @@ class CcgToStpLookup(db.Model):
         region_cdh,
         region_name,
         file
-        ):
+    ):
         lookup_row = self(
-            ccg_code = ccg_code,
-            ccg_name = ccg_name,
-            stp_code = stp_code,
-            stp_cdh =  stp_cdh,
-            stp_name = stp_name,
-            region_code = region_code,
-            region_cdh = region_cdh,
-            region_name = region_name,
-            file = file
+            ccg_code=ccg_code,
+            ccg_name=ccg_name,
+            stp_code=stp_code,
+            stp_cdh=stp_cdh,
+            stp_name=stp_name,
+            region_code=region_code,
+            region_cdh=region_cdh,
+            region_name=region_name,
+            file=file
         )
 
         db.session.add(lookup_row)
@@ -63,7 +63,7 @@ class Words(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String(200))
-    
+
 
 function_snippet = db.DDL("""
     CREATE FUNCTION tsv_searchable_text_trigger() RETURNS trigger AS $$
@@ -104,6 +104,6 @@ add_words_snippet = db.DDL("""
     """)
 
 
-db.event.listen(CcgToStpLookup.__table__, 'after_create', function_snippet.execute_if(dialect = 'postgresql'))
-db.event.listen(CcgToStpLookup.__table__, 'after_create', trigger_snippet.execute_if(dialect = 'postgresql'))
+db.event.listen(CcgToStpLookup.__table__, 'after_create', function_snippet.execute_if(dialect='postgresql'))
+db.event.listen(CcgToStpLookup.__table__, 'after_create', trigger_snippet.execute_if(dialect='postgresql'))
 # db.event.listen(CcgToStpLookup.__table__, 'after_insert', add_words_snippet.execute_if(dialect = 'postgresql'))

@@ -3,6 +3,7 @@ from app import db
 from app.api.location.models import CcgToStpLookup, Words
 from app.logger import logger
 
+
 def create_lookup(
     ccg_code,
     ccg_name,
@@ -47,7 +48,7 @@ def read_lookup_by_region_code(region_code):
 
 
 def search_lookup(search_query):
-    
+
     results = db.session.query(
         CcgToStpLookup.id,
         CcgToStpLookup.ccg_code,
@@ -59,11 +60,12 @@ def search_lookup(search_query):
         CcgToStpLookup.region_cdh,
         CcgToStpLookup.region_name,
         CcgToStpLookup.created_at,
-        func.ts_rank_cd(CcgToStpLookup.tsv_searchable_text, func.plainto_tsquery(search_query, postgresql_regconfig='english'), 32).label('rank')
+        func.ts_rank_cd(CcgToStpLookup.tsv_searchable_text, func.plainto_tsquery(
+            search_query, postgresql_regconfig='english'), 32).label('rank')
     ).filter(
         CcgToStpLookup.tsv_searchable_text.match(search_query, postgresql_regconfig='english')
     ).order_by(db.text('rank DESC')).limit(10)
-    
+
     return results
 
 
@@ -86,7 +88,7 @@ def read_words(search_query):
     )
 
     words_result = []
-    
+
     for r in words_object:
         logger.debug(f"result_object: {r}")
         word = r[0]

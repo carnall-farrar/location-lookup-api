@@ -1,10 +1,13 @@
 import sys
+import json
 
 from flask.cli import FlaskGroup
 
 from app import create_app, db
 from app.logger import logger
 from app.api.location.models import CcgToStpLookup, Words
+from app.api.lsoa.models import LsoaCcgStpLookup
+from app.api.lsoa.lsoa_utils import createLsoaRow
 
 
 # app = create_app()
@@ -16,6 +19,7 @@ def recreate_db():
     db.drop_all()
     CcgToStpLookup.__table__.create(db.session.bind)
     Words.__table__.create(db.session.bind)
+    LsoaCcgStpLookup.__table__.create(db.session.bind)
     # db.create_all()
     db.session.commit()
 
@@ -39,6 +43,40 @@ def add_ccg_lookup():
                 file=split[5].strip()
             )
             logger.info(row)
+
+
+@cli.command('add_lsoa_lookup')
+def add_lsoa_lookup():
+    logger.info('Adding lsoa lookup rows')
+    with open("data/lsoa_ccg_stp.txt") as fp:
+        lines = fp.readlines()
+        lsoaRows = 0
+        for line in lines[1:]:
+            [
+                lsoa_code,
+                lsoa_name,
+                ccg_code,
+                ccg_cdh,
+                ccg_name,
+                stp_code,
+                stp_name,
+                local_authority_code,
+                local_authority_name,
+            ] = line.split("\t")
+
+            row = createLsoaRow(
+                lsoa_code=lsoa_code,
+                lsoa_name=lsoa_name,
+                ccg_code=ccg_code,
+                ccg_cdh=ccg_cdh,
+                ccg_name=ccg_name,
+                stp_code=stp_code,
+                stp_name=stp_name,
+                local_authority_code=local_authority_code,
+                local_authority_name=local_authority_name.strip("\n")
+            )
+            lsoaRows += 1
+    logger.info(f'Added lsoa lookup: {lsoaRows} rows')
 
 
 @cli.command('add_words')
@@ -73,6 +111,7 @@ def add_words_index():
     db.session.execute(add_words_index_snippet)
     db.session.commit()
     logger.info("Words index added")
+
 
 if __name__ == '__main__':
     cli()

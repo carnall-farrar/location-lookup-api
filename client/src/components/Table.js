@@ -71,7 +71,7 @@ export const MainTable = ({
     <Paper
       sx={{
         width: "100%",
-        height: "50%",
+        height: "100%",
         overflow: "hidden",
         margin: "auto",
         marginTop: "1%",
