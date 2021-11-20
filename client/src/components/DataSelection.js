@@ -8,22 +8,14 @@ import Divider from '@mui/material/Divider';
 import StorageIcon from '@mui/icons-material/Storage';
 import PublicIcon from '@mui/icons-material/Public';
 
-export const DataSelection = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-  const handleListItemClick = (
-    event,
-    index,
-  ) => {
-    setSelectedIndex(index);
-  };
-
+export const DataSelection = ({selectedIndex, onClick}) => {
+  
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <List component="nav" aria-label="main mailbox folders">
         <ListItemButton
-          selected={selectedIndex === 0}
-          onClick={(event) => handleListItemClick(event, 0)}
+          selected={selectedIndex === 'location'}
+          onClick={() => onClick('location')}
         >
           <ListItemIcon>
             <StorageIcon style={{width:20, height:20}}/>
@@ -31,8 +23,8 @@ export const DataSelection = () => {
           <ListItemText secondary="CCG to Region" />
         </ListItemButton>
         <ListItemButton
-          selected={selectedIndex === 1}
-          onClick={(event) => handleListItemClick(event, 1)}
+          selected={selectedIndex === 'lsoa'}
+          onClick={() => onClick('lsoa')}
         >
           <ListItemIcon>
             <StorageIcon style={{width:20, height:20}} />
@@ -40,8 +32,8 @@ export const DataSelection = () => {
           <ListItemText secondary="LSOA to Region" />
         </ListItemButton>
         <ListItemButton
-          selected={selectedIndex === 2}
-          onClick={(event) => handleListItemClick(event, 2)}
+          selected={selectedIndex === 'trustGeodata'}
+          onClick={() => onClick('trustGeodata')}
         >
           <ListItemIcon>
             <PublicIcon style={{width:20, height:20}}/>
@@ -50,14 +42,6 @@ export const DataSelection = () => {
         </ListItemButton>
       </List>
       <Divider />
-      <List component="nav" aria-label="secondary mailbox folder">
-        <ListItemButton
-          selected={selectedIndex === 3}
-          onClick={(event) => handleListItemClick(event, 3)}
-        >
-          <ListItemText secondary="Documentation" />
-        </ListItemButton>
-      </List>
     </Box>
   );
 }

@@ -14,7 +14,7 @@ function App () {
 
   const [results, setResults] = useState([]);
   const [tableData, setTableData] = useState({data:[], cols:[]});
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState('location');
   console.log(selectedIndex)
 
   const search = async (query) => {
@@ -34,12 +34,12 @@ function App () {
 
   
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_LOCATION_SERVICE_URL}/location`)
+    axios.get(`${process.env.REACT_APP_LOCATION_SERVICE_URL}/${selectedIndex}`)
         .then((response) => {
           const columns = Object.keys(response.data[0]);
           setTableData({data: response.data, cols: columns})
         })
-  }, []);
+  }, [selectedIndex]);
 
   return (
     <div
@@ -53,14 +53,14 @@ function App () {
         <Card sx={{width: '20%', marginRight: '10px', height: "90vh"}}>
           <div style={{marginLeft:'15px', marginTop:'20px'}}>
             <span style={{color:'#26B0B2', fontWeight:'bold'}}>Select dataset</span>
-            <DataSelection />
+            <DataSelection selectedIndex={selectedIndex} onClick={setSelectedIndex} />
+            <br></br>
             <span style={{color:'lightgray'}}>More datasets will be added here in due course</span>
           </div>
         </Card>
-        <Card sx={{width: '80%', height:'110vh', flex: '1 1 auto', overflow:'auto'}}>
-          <Search search={search} />
-          <MainTable data={tableData.data} cols={tableData.cols}/>
-          <ResultList results={results}/>
+        <Card sx={{width: '80%', height:'90vh', flex: '1 1 auto', overflow:'auto'}}>
+          <MainTable data={tableData.data} cols={tableData.cols} search={search} />
+          <ResultList results={results} />
         </Card>
       </div>
     </div>

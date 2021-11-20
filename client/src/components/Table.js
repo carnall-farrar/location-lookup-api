@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import { visuallyHidden } from "@mui/utils";
+import Search from '../components/Search';
 
 const useStyles = makeStyles(() => ({
   metricTitle: {
@@ -36,7 +37,8 @@ const getComparator = (order, orderBy) => {
 
 export const MainTable = ({
   data,
-  cols
+  cols,
+  search,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -77,6 +79,7 @@ export const MainTable = ({
         marginTop: "1%",
       }}
     >
+      <Search search={search} />
       <TableContainer style={{ maxHeight: "100%" }}>
         <Table stickyHeader aria-label="sticky table" size="small">
           <TableHead
