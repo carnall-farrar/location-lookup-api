@@ -32,8 +32,8 @@ export const DataSelection = ({selectedIndex, onClick}) => {
           <ListItemText secondary="LSOA to Region" />
         </ListItemButton>
         <ListItemButton
-          selected={selectedIndex === 'trustGeodata'}
-          onClick={() => onClick('trustGeodata')}
+          selected={selectedIndex === 'trustGeo'}
+          onClick={() => onClick('trustGeo')}
         >
           <ListItemIcon>
             <PublicIcon style={{width:20, height:20}}/>

@@ -7,7 +7,9 @@ from app import create_app, db
 from app.logger import logger
 from app.api.location.models import CcgToStpLookup, Words
 from app.api.lsoa.models import LsoaCcgStpLookup
+from app.api.trust_geodata.models import AllTrustGeodata
 from app.api.lsoa.lsoa_utils import createLsoaRow
+from app.api.trust_geodata.crud import createTrustGeodataRow
 
 
 # app = create_app()
@@ -20,6 +22,7 @@ def recreate_db():
     CcgToStpLookup.__table__.create(db.session.bind)
     Words.__table__.create(db.session.bind)
     LsoaCcgStpLookup.__table__.create(db.session.bind)
+    AllTrustGeodata.__table__.create(db.session.bind)
     # db.create_all()
     db.session.commit()
 
@@ -77,6 +80,62 @@ def add_lsoa_lookup():
             )
             lsoaRows += 1
     logger.info(f'Added lsoa lookup: {lsoaRows} rows')
+
+
+@cli.command('add_trust_geodata')
+def add_trust_geodata():
+    logger.info('Adding trust geodata rows')
+    with open("data/all_hospital_locations.txt") as fp:
+        lines = fp.readlines()
+        geoRows = 0
+        for line in lines[1:]:
+            [
+                OrganisationCode,
+                OrganisationType,
+                SubType,
+                Sector,
+                OrganisationStatus,
+                OrganisationName,
+                Address1,
+                Address2,
+                Address3,
+                City,
+                County,
+                Postcode,
+                y,
+                x,
+                ParentODSCode,
+                ParentName,
+                Organisation,
+                min_travel_time_destination,
+                Latitude,
+                Longitude,
+            ] = line.split("\t")
+
+            row = createTrustGeodataRow(
+                OrganisationCode=OrganisationCode,
+                OrganisationType=OrganisationType,
+                SubType=SubType,
+                Sector=Sector,
+                OrganisationStatus=OrganisationStatus,
+                OrganisationName=OrganisationName,
+                Address1=Address1,
+                Address2=Address2,
+                Address3=Address3,
+                City=City,
+                County=County,
+                Postcode=Postcode,
+                y=y,
+                x=x,
+                ParentODSCode=ParentODSCode,
+                ParentName=ParentName,
+                Organisation=Organisation,
+                min_travel_time_destination=min_travel_time_destination,
+                Latitude=Latitude,
+                Longitude=Longitude.strip("\n")
+            )
+            geoRows += 1
+    logger.info(f'Added trust geodata: {geoRows} rows')
 
 
 @cli.command('add_words')

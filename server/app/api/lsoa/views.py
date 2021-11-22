@@ -1,6 +1,5 @@
 from flask import request, send_file
 from flask_restx import Resource, fields, Namespace
-import pandas as pd
 
 from app.logger import logger
 from app.api.lsoa.crud import (

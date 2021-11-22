@@ -4,6 +4,7 @@ build:
 	docker-compose exec app python manage.py recreate_db
 	docker-compose exec app python manage.py add_ccg_lookup
 	docker-compose exec app python manage.py add_lsoa_lookup
+	docker-compose exec app python manage.py add_trust_geodata
 	docker-compose exec app python manage.py add_words
 	docker-compose exec app python manage.py add_words_index
 
@@ -11,6 +12,7 @@ up:
 	pipenv run python notebooks/make_data.py
 	docker-compose up -d
 	docker-compose exec app python manage.py recreate_db
+	docker-compose exec app python manage.py add_trust_geodata
 	docker-compose exec app python manage.py add_ccg_lookup
 	docker-compose exec app python manage.py add_lsoa_lookup
 	docker-compose exec app python manage.py add_words
