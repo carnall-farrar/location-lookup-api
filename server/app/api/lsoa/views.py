@@ -1,4 +1,4 @@
-from flask import request, send_file
+from flask import request, send_from_directory, abort
 from flask_restx import Resource, fields, Namespace
 
 from app.logger import logger
@@ -41,13 +41,12 @@ class LsoaFirst500(Resource):
 
 class LsoaALL(Resource):
     @lsoa_namespace.response(200, "Success")
-    @lsoa_namespace.response(404, "No Locations Found")
     def get(self):
         """Returns full LSOA dataset - for download to csv"""
-        response = send_file(LSOA_DATA_PATH, as_attachment=True)
-        response.headers['Content-Type'] = 'text/csv'
-        response.headers['Content-Disposition'] = 'attachment; filename=download.csv'
-        return response, 200
+        try:
+            return send_from_directory(LSOA_DATA_PATH, filename='all_hospital_locations.csv',  as_attachment=True)
+        except FileNotFoundError:
+            abort(404)
 
 
 lsoa_namespace.add_resource(LsoaFirst500, "")
