@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 
 import axios from 'axios';
 import { Formik } from 'formik';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import Button from '@mui/material/Button';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import DownloadIcon from '@mui/icons-material/Download';
+import SearchIcon from '@mui/icons-material/Search';
 
 function Search ({ search }) {
 
@@ -74,7 +77,22 @@ function Search ({ search }) {
                         />
             </Form.Group>
             <Form.Group>
-                <Button type='submit' style={{backgroundColor:'#26B0B2', border:'thin solid #26B0B2'}}>Search</Button>
+                <Button 
+                type='submit' 
+                style={{backgroundColor:'#26B0B2', color: '#FFFF', border:'thin solid #26B0B2'}}
+                endIcon={<SearchIcon />}
+                >
+                Search
+                </Button>
+            </Form.Group>
+            <Form.Group>
+                <Button 
+                type='submit' 
+                style={{backgroundColor:'#E30B9E', color: '#FFFF', border:'thin solid #E30B9E'}}
+                endIcon={<DownloadIcon />}
+                >
+                 Download
+                </Button>
             </Form.Group>
             </Form>
         )}

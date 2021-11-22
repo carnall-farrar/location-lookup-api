@@ -68,6 +68,7 @@ class LocationList(Resource):
         """Returns all locations in DB"""
         return read_lookups(), 200
 
+
 class LocationSearch(Resource):
     @location_namespace.marshal_with(location_search, as_list=True)
     @location_namespace.response(200, "Success")
