@@ -2,6 +2,7 @@ build:
 	pipenv run python notebooks/make_data.py
 	docker-compose up -d --build
 	docker-compose exec app python manage.py recreate_db
+	docker-compose exec app python manage.py add_practice_lsoa_imd
 	docker-compose exec app python manage.py add_ccg_lookup
 	docker-compose exec app python manage.py add_lsoa_lookup
 	docker-compose exec app python manage.py add_trust_geodata
@@ -12,6 +13,7 @@ up:
 	pipenv run python notebooks/make_data.py
 	docker-compose up -d
 	docker-compose exec app python manage.py recreate_db
+	docker-compose exec app python manage.py add_practice_lsoa_imd
 	docker-compose exec app python manage.py add_trust_geodata
 	docker-compose exec app python manage.py add_ccg_lookup
 	docker-compose exec app python manage.py add_lsoa_lookup

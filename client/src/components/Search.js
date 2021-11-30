@@ -8,7 +8,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import DownloadIcon from '@mui/icons-material/Download';
 import SearchIcon from '@mui/icons-material/Search';
 
-function Search ({ search }) {
+function Search ({ search, handleDownloadClick }) {
 
     const [isLoading, setLoading] = useState(false);
     const [options, setOptions] = useState([]);
@@ -90,6 +90,7 @@ function Search ({ search }) {
                 type='submit' 
                 style={{backgroundColor:'#E30B9E', color: '#FFFF', border:'thin solid #E30B9E'}}
                 endIcon={<DownloadIcon />}
+                onClick={handleDownloadClick}
                 >
                  Download
                 </Button>

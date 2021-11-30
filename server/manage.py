@@ -8,8 +8,10 @@ from app.logger import logger
 from app.api.location.models import CcgToStpLookup, Words
 from app.api.lsoa.models import LsoaCcgStpLookup
 from app.api.trust_geodata.models import AllTrustGeodata
+from app.api.practice_lsoa_imd.models import PracticeToImd
 from app.api.lsoa.lsoa_utils import createLsoaRow
 from app.api.trust_geodata.crud import createTrustGeodataRow
+from app.api.practice_lsoa_imd.crud import createPracticeImdRow
 
 
 # app = create_app()
@@ -23,6 +25,7 @@ def recreate_db():
     Words.__table__.create(db.session.bind)
     LsoaCcgStpLookup.__table__.create(db.session.bind)
     AllTrustGeodata.__table__.create(db.session.bind)
+    PracticeToImd.__table__.create(db.session.bind)
     # db.create_all()
     db.session.commit()
 
@@ -80,6 +83,84 @@ def add_lsoa_lookup():
             )
             lsoaRows += 1
     logger.info(f'Added lsoa lookup: {lsoaRows} rows')
+
+
+@cli.command('add_practice_lsoa_imd')
+def add_lsoa_lookup():
+    logger.info('Adding practice -> lsoa -> imd rows')
+    with open("data/practice_to_lsoa_to_imd.txt") as fp:
+        lines = fp.readlines()
+        rows = 0
+        for line in lines[1:]:
+            [
+                code,
+                name,
+                address,
+                postcode,
+                postcode_status,
+                lsoa_code,
+                lsoa_name,
+                imd_rank,
+                imd_decile,
+                imcome_rank,
+                income_decile,
+                income_score,
+                emplyment_rank,
+                employment_decile,
+                employment_score,
+                education_skills_rank,
+                education_skills_decile,
+                health_disability_rank,
+                health_disability_decile,
+                crime_rank,
+                crime_decile,
+                barriers_to_housing_services_rank,
+                barriers_to_housing_services_decile,
+                living_environment_rank,
+                living_environment_decile,
+                IDACI_rank,
+                IDACI_decile,
+                IDACI_score,
+                IDAOPI_rank,
+                IDAOPI_decile,
+                IDAOPI_score
+            ] = line.split("\t")
+
+            row = createPracticeImdRow(
+                code=code,
+                name=name,
+                address=address,
+                postcode=postcode,
+                postcode_status=postcode_status,
+                lsoa_code=lsoa_code,
+                lsoa_name=lsoa_name,
+                imd_rank=imd_rank,
+                imd_decile=imd_decile,
+                imcome_rank=imcome_rank,
+                income_decile=income_decile,
+                income_score=income_score,
+                emplyment_rank=emplyment_rank,
+                employment_decile=employment_decile,
+                employment_score=employment_score,
+                education_skills_rank=education_skills_rank,
+                education_skills_decile=education_skills_decile,
+                health_disability_rank=health_disability_rank,
+                health_disability_decile=health_disability_decile,
+                crime_rank=crime_rank,
+                crime_decile=crime_decile,
+                barriers_to_housing_services_rank=barriers_to_housing_services_rank,
+                barriers_to_housing_services_decile=barriers_to_housing_services_decile,
+                living_environment_rank=living_environment_rank,
+                living_environment_decile=living_environment_decile,
+                IDACI_rank=IDACI_rank,
+                IDACI_decile=IDACI_decile,
+                IDACI_score=IDACI_score,
+                IDAOPI_rank=IDAOPI_rank,
+                IDAOPI_decile=IDAOPI_decile,
+                IDAOPI_score=IDAOPI_score.strip("\n")
+            )
+            rows += 1
+    logger.info(f'Added practice lsoa imd lookup: {rows} rows')
 
 
 @cli.command('add_trust_geodata')

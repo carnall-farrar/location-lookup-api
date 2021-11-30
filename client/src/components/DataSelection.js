@@ -32,6 +32,15 @@ export const DataSelection = ({selectedIndex, onClick}) => {
           <ListItemText secondary="LSOA to Region" />
         </ListItemButton>
         <ListItemButton
+          selected={selectedIndex === 'practiceToImd'}
+          onClick={() => onClick('practiceToImd')}
+        >
+          <ListItemIcon>
+            <StorageIcon style={{width:20, height:20}}/>
+          </ListItemIcon>
+          <ListItemText secondary="GP to IMD" />
+        </ListItemButton>
+        <ListItemButton
           selected={selectedIndex === 'trustGeo'}
           onClick={() => onClick('trustGeo')}
         >

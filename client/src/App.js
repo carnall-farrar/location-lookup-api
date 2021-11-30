@@ -4,7 +4,6 @@ import axios from 'axios';
 import './App.css';
 
 import ResultList from './components/ResultList';
-import Search from './components/Search';
 import { MainTable } from './components/Table';
 import { NavBar } from './components/NavBar';
 import { DataSelection } from './components/DataSelection';
@@ -15,7 +14,6 @@ function App () {
   const [results, setResults] = useState([]);
   const [tableData, setTableData] = useState({data:[], cols:[]});
   const [selectedIndex, setSelectedIndex] = React.useState('location');
-  console.log(selectedIndex)
 
   const search = async (query) => {
     try {
@@ -59,7 +57,7 @@ function App () {
           </div>
         </Card>
         <Card sx={{width: '80%', height:'90vh', flex: '1 1 auto', overflow:'auto'}}>
-          <MainTable data={tableData.data} cols={tableData.cols} search={search} />
+          <MainTable data={tableData.data} cols={tableData.cols} search={search} selectedIndex={selectedIndex} />
           <ResultList results={results} />
         </Card>
       </div>

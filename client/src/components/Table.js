@@ -6,18 +6,20 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import { visuallyHidden } from "@mui/utils";
 import Search from '../components/Search';
+import axios from 'axios';
+import FileSaver from 'file-saver';
 
-const useStyles = makeStyles(() => ({
-  metricTitle: {
-    color: "blue",
-    borderBottom: "1pt dashed black",
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   metricTitle: {
+//     color: "blue",
+//     borderBottom: "1pt dashed black",
+//   },
+// }));
 
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
@@ -35,12 +37,29 @@ const getComparator = (order, orderBy) => {
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 
+const download = async (selectedIndex) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${process.env.REACT_APP_LOCATION_SERVICE_URL}/${selectedIndex}/download`,
+    });
+    console.log(response.data)
+    const csvData = new Blob ([response.data], {
+      type: 'text/plain;charset=utf-8;',
+    })
+    FileSaver.saveAs(csvData, `${selectedIndex}Data.csv`)
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const MainTable = ({
   data,
   cols,
   search,
+  selectedIndex,
 }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("selectedStpScore");
 
@@ -52,6 +71,11 @@ export const MainTable = ({
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  const handleDownloadClick = () => {
+    console.log("hello")
+    return download(selectedIndex)
+  }
 
   const createSortHandler =
     (property) =>
@@ -79,7 +103,7 @@ export const MainTable = ({
         marginTop: "1%",
       }}
     >
-      <Search search={search} />
+      <Search search={search} handleDownloadClick={handleDownloadClick} />
       <TableContainer style={{ maxHeight: "100%" }}>
         <Table stickyHeader aria-label="sticky table" size="small">
           <TableHead

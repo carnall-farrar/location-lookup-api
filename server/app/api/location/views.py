@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, send_file
 from flask_restx import Resource, fields, Namespace
 
 from app.logger import logger
@@ -12,6 +12,8 @@ from app.api.location.crud import (
     read_lookup_by_region_code,
     create_lookup,
 )
+
+LOCATION_PATH = 'static_data/combined_lookup_download.csv'
 
 
 location_namespace = Namespace("location")
@@ -69,6 +71,13 @@ class LocationList(Resource):
         return read_lookups(), 200
 
 
+class DownloadLocation(Resource):
+    @location_namespace.header('Locations', collectionType='csv')
+    def get(self):
+        """Downloads csv of location file"""
+        return send_file(LOCATION_PATH, as_attachment=True)
+
+
 class LocationSearch(Resource):
     @location_namespace.marshal_with(location_search, as_list=True)
     @location_namespace.response(200, "Success")
@@ -115,3 +124,4 @@ location_namespace.add_resource(LocationList, "")
 location_namespace.add_resource(LocationSearchWords, "/words")
 location_namespace.add_resource(LocationSearch, "/search")
 location_namespace.add_resource(Location, "/<int:location_id>")
+location_namespace.add_resource(DownloadLocation, "/download")
