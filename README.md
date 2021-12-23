@@ -1,5 +1,7 @@
 # location-lookup-api
 
+API + FE app for looking up NHS location data
+
 ## Data Sources
 
 > https://geoportal.statistics.gov.uk/datasets/ons::clinical-commissioning-group-to-stps-april-2019-lookup-in-england/about
