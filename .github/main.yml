@@ -1,0 +1,88 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./server
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: cf-vitalstatistix-ingestor
+          IMAGE_TAG: ${{ github.sha }}
+        working-directory: ${{env.working-directory}}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./terraform
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.14.6
+
+      - name: Terraform Fmt
+        id: fmt
+        run: terraform fmt -check -diff
+        working-directory: ${{env.working-directory}}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ${{env.working-directory}}
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: ${{env.working-directory}}
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ${{env.working-directory}}
+        run: |
+          terraform plan \
+          -var="tag=${{ github.sha }}" \
+          -var="password=${{ secrets.POSTGRES_PASSWORD }}"
+          -var-file="vars/prod.tfvars" \
+          -out ./llapi.out
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply ./llapi.out
+        working-directory: ${{env.working-directory}}

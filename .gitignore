@@ -19,3 +19,5 @@ secrets/
 .mypy_cache
 **/*.swp
 los_output.csv
+.terraform
+.terraform.lock.hcl
