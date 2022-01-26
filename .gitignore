@@ -21,3 +21,4 @@ secrets/
 los_output.csv
 .terraform
 .terraform.lock.hcl
+llapi.out
