@@ -2,9 +2,9 @@ variable "db_password" {
   type = string
 }
 
-# variable "tag" {
-#   type = string
-# }
+variable "tag" {
+  type = string
+}
 
 variable "log_group_name" {
   type = string

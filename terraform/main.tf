@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "compute_task" {
   [
     {
       "name": "${var.task_name}",
-      "image": "busybox",
+      "image": "image": "${aws_ecr_repository.docker_container_registry.repository_url}:${var.tag}",
       "essential": true,
       "portMappings": [
         {
@@ -67,11 +67,11 @@ resource "aws_ecs_task_definition" "compute_task" {
         },
         {
           "name": "FLASK_ENV",
-          "value": "development"
+          "value": "production"
         },
         {
           "name": "APP_SETTINGS",
-          "value": "app.config.DevelopmentConfig"
+          "value": "app.config.ProductionConfig"
         }
       ],
       "logConfiguration": {
