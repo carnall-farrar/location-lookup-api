@@ -28,11 +28,10 @@ variable "task_name" {
 
 variable "db_username" {
   type    = string
-  default = "locationlookup"
 }
 
 variable "dns_name" {
-  type = string
+  type    = string
 }
 
 variable "lb_name" {
