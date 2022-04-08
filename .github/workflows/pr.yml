@@ -1,9 +1,6 @@
-name: Main
+name: Pull Request
 
-on:
-  push:
-    branches:
-      - main
+on: pull_request
 
 jobs:
   build:
@@ -56,7 +53,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 0.14.6
+          terraform_version: 1.0.11
 
       - name: Terraform Fmt
         id: fmt
@@ -81,9 +78,4 @@ jobs:
           -var="tag=${{ github.sha }}" \
           -var="db_password=${{ secrets.POSTGRES_PASSWORD }}" \
           -var-file="vars/prod.tfvars" \
-          -out ./location.out
-
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply ./location.out
-        working-directory: ${{env.working-directory}}
+          -out ./location-pr.out

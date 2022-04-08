@@ -2,9 +2,9 @@ variable "db_password" {
   type = string
 }
 
-# variable "tag" {
-#   type = string
-# }
+variable "tag" {
+  type = string
+}
 
 variable "log_group_name" {
   type = string
@@ -47,13 +47,5 @@ variable "docker_registry_name" {
 }
 
 variable "dns_zone_id" {
-  type = string
-}
-
-variable "bucket_raw_data_name" {
-  type = string
-}
-
-variable "bucket_output_data_name" {
   type = string
 }
