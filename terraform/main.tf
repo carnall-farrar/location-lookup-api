@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "compute_task" {
   [
     {
       "name": "${var.task_name}",
-      "image": "image": "${aws_ecr_repository.docker_container_registry.repository_url}:${var.tag}",
+      "image": "${aws_ecr_repository.docker_container_registry.repository_url}:${var.tag}",
       "essential": true,
       "portMappings": [
         {
