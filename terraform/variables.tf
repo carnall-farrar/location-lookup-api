@@ -27,11 +27,11 @@ variable "task_name" {
 }
 
 variable "db_username" {
-  type    = string
+  type = string
 }
 
 variable "dns_name" {
-  type    = string
+  type = string
 }
 
 variable "lb_name" {
