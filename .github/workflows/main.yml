@@ -79,7 +79,7 @@ jobs:
         run: |
           terraform plan \
           -var="tag=${{ github.sha }}" \
-          -var="password=${{ secrets.POSTGRES_PASSWORD }}"
+          -var="db_password=${{ secrets.POSTGRES_PASSWORD }}"
           -var-file="vars/prod.tfvars" \
           -out ./location.out
 
