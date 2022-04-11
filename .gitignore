@@ -9,7 +9,6 @@ models/__pycache__/
 *.zip
 *.pptx
 *.pdf
-*.csv
 /data/*
 /outputs/*
 */*.ipynb_checkpoints
