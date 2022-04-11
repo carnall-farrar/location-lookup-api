@@ -24,4 +24,6 @@ RUN pip install -r requirements-dev.txt
 # add app
 COPY . /usr/src/app
 
-CMD ["python manage.py run -h 0.0.0.0"]
+COPY ./run.sh ./run.sh
+
+CMD ./run.sh
