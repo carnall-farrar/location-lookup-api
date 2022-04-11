@@ -191,7 +191,7 @@ resource "aws_lb_target_group" "lb_target_group" {
 
   health_check {
     matcher             = "200,301,302"
-    path                = "/"
+    path                = "/ping"
     interval            = 300
     timeout             = 120
     unhealthy_threshold = 5
