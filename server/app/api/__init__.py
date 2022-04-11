@@ -5,7 +5,7 @@ from app.api.location.views import location_namespace
 from app.api.lsoa.views import lsoa_namespace
 from app.api.trust_geodata.views import trustGeo_namespace
 
-api = Api(version="1.0", title="Backend API", doc="/doc/")
+api = Api(version="1.0", title="Location Lookup API", doc="/doc/")
 
 api.add_namespace(ping_namespace, path="/ping")
 api.add_namespace(location_namespace, path="/location")
