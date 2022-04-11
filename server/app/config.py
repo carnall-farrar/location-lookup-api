@@ -33,5 +33,5 @@ class ProductionConfig(BaseConfig):
     postgres_user = os.environ.get("POSTGRES_USER")
     postgres_password = os.environ.get("POSTGRES_PASSWORD")
     postgres_host = os.environ.get("POSTGRES_HOST")
-    SQLALCHEMY_DATABASE_URI = f"postgresql://{postgres_user}:{postgres_password}@{postgres_host}/location_dev"
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{postgres_user}:{postgres_password}@{postgres_host}/locationlookup"
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious")
