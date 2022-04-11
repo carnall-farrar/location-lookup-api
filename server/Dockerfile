@@ -1,28 +1,33 @@
-# pull official base image
-FROM python:3.8.1-alpine
+FROM python:3.9.6
 
-# install dependencies
-# updated
-RUN apk update && \
-    apk add --no-cache --virtual build-deps \
-    openssl-dev libffi-dev gcc python3-dev musl-dev \
-    postgresql-dev netcat-openbsd g++
+ENV YOUR_ENV=${YOUR_ENV} \
+  PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONFAULTHANDLER=1 \
+  PYTHONUNBUFFERED=1 \
+  PYTHONHASHSEED=random \
+  PIP_NO_CACHE_DIR=off \
+  PIP_DISABLE_PIP_VERSION_CHECK=on \
+  PIP_DEFAULT_TIMEOUT=100 \
+  POETRY_VERSION=1.1.12
 
-# set environment varibles
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+RUN apt-get update \
+  && apt-get -y install netcat gcc \
+  && apt-get clean
 
-# set working directory
+
+# System deps:
+RUN pip install "poetry==$POETRY_VERSION"
+
+# Copy only requirements to cache them in docker layer
 WORKDIR /usr/src/app
+COPY pyproject.toml /usr/src/app/
 
-# install dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/app/requirements.txt
-COPY ./requirements-dev.txt /usr/src/app/requirements-dev.txt
-RUN pip install -r requirements-dev.txt
+# Project initialization:
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-ansi
 
-# add app
-COPY . /usr/src/app
+# Creating folders, and files for a project:
+COPY . .
 
 COPY ./run.sh ./run.sh
 
