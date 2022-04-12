@@ -66,7 +66,7 @@ class TrustGeoList(Resource):
     def post(self):
         """Query with List of Codes"""
         post_data = request.get_json()
-        codes = post_data['org_codes']
+        codes = post_data["codes"]
         names = []
         for code in codes:
             name = read_org_by_orgcode(code)
