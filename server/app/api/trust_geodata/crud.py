@@ -50,5 +50,13 @@ def createTrustGeodataRow(
     return trustGeoRow
 
 
-def read_trust_geo_first_500():
+def read_trust_geo_first_100():
     return AllTrustGeodata.query.limit(100).all()
+
+
+def read_org_by_orgcode(org_code):
+    return AllTrustGeodata.query.filter_by(OrganisationCode=org_code).first()
+
+
+def read_org_by_parent(parent_ods_code):
+    return AllTrustGeodata.query.filter_by(ParentODSCode=parent_ods_code).all()
