@@ -49,3 +49,7 @@ variable "docker_registry_name" {
 variable "dns_zone_id" {
   type = string
 }
+
+variable "secret_name" {
+  type = string
+}

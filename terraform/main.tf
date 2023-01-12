@@ -23,6 +23,21 @@ data "aws_iam_role" "ecsTaskExecutionRole" {
   name = "ecsTaskExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "secretManagerReads" {
+  role       = data.aws_iam_role.ecsTaskExecutionRole.name
+  policy_arn = "arn:aws:iam::037892153371:policy/cf-secret-manager-reads"
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_policy_attachment2" {
+  role       = data.aws_iam_role.ecsTaskExecutionRole.name
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+}
+
+data "aws_secretsmanager_secret_version" "secrets" {
+  # Fill in the name you gave to your secret
+  secret_id = var.secret_name
+}
+
 data "aws_acm_certificate" "cfdata_issued" {
   domain   = "*.cfdata.io"
   statuses = ["ISSUED"]
@@ -52,26 +67,26 @@ resource "aws_ecs_task_definition" "compute_task" {
           "hostPort": 5000
         }
       ],
-      "environment": [
+      "secrets": [
         {
           "name": "POSTGRES_USER",
-          "value": "${var.db_username}"
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
         },
         {
           "name": "POSTGRES_PASSWORD",
-          "value": "${var.db_password}"
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
         },
         {
           "name": "POSTGRES_HOST",
-          "value": "${aws_db_instance.db.endpoint}"
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
         },
         {
           "name": "FLASK_ENV",
-          "value": "production"
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
         },
         {
           "name": "APP_SETTINGS",
-          "value": "app.config.ProductionConfig"
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
         }
       ],
       "logConfiguration": {
