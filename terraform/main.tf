@@ -86,7 +86,7 @@ resource "aws_ecs_task_definition" "compute_task" {
         },
         {
           "name": "APP_SETTINGS",
-          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:APP_SETTINGS::"
         }
       ],
       "logConfiguration": {
