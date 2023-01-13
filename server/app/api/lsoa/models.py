@@ -1,3 +1,5 @@
+import logging
+
 from app import db
 
 
@@ -44,7 +46,9 @@ class LsoaCcgStpLookup(db.Model):
             local_authority_code=local_authority_code,
             local_authority_name=local_authority_name
         )
-
-        db.session.add(lsoa_row)
-        db.session.commit()
+        try:
+            db.session.add(lsoa_row)
+            db.session.commit()
+        except Exception as e:
+            logging.info(e)
         return lsoa_row
