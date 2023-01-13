@@ -69,6 +69,14 @@ resource "aws_ecs_task_definition" "compute_task" {
       ],
       "secrets": [
         {
+          "name": "POSTGRES_USER",
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
+        },
+        {
           "name": "POSTGRES_HOST",
           "valueFrom" : "${data.aws_secretsmanager_secret_version.secrets.arn}:AWS_ACCESS_KEY::"
         },
