@@ -39,17 +39,20 @@ def add_ccg_lookup():
 
         for line in lines[1:]:
             split = line.split("|")
-            row = CcgToStpLookup.create(
-                ccg_code=split[1].strip(),
-                ccg_name=split[2].strip(),
-                stp_code=split[3].strip(),
-                stp_cdh=split[8].strip(),
-                stp_name=split[4].strip(),
-                region_code=split[10].strip(),
-                region_cdh=split[11].strip(),
-                region_name=split[12].strip(),
-                file=split[5].strip()
-            )
+            try:
+                row = CcgToStpLookup.create(
+                    ccg_code=split[1].strip(),
+                    ccg_name=split[2].strip(),
+                    stp_code=split[3].strip(),
+                    stp_cdh=split[8].strip(),
+                    stp_name=split[4].strip(),
+                    region_code=split[10].strip(),
+                    region_cdh=split[11].strip(),
+                    region_name=split[12].strip(),
+                    file=split[5].strip()
+                )
+            except Exception as e:
+                logger.info(e)
             logger.info(row)
 
 
