@@ -148,35 +148,41 @@ def add_trust_geodata():
 
 @cli.command('add_words')
 def add_words():
-    add_words_snippet = db.DDL("""
-        INSERT INTO words (word)
-        SELECT word FROM ts_stat('
-          SELECT to_tsvector(''simple'', ccg_code) ||
-                 to_tsvector(''simple'', coalesce(ccg_name, '''')) ||
-                 to_tsvector(''simple'', stp_code) ||
-                 to_tsvector(''simple'', stp_cdh) ||
-                 to_tsvector(''simple'', coalesce(stp_name, '''')) ||
-                 to_tsvector(''simple'', region_code) ||
-                 to_tsvector(''simple'', region_cdh) ||
-                 to_tsvector(''simple'', coalesce(region_name, ''''))
-            FROM ccg_lookup
-        ');
-    """)
-    db.session.execute(add_words_snippet)
-    db.session.commit()
-    logger.info("Words added")
+    try:
+        add_words_snippet = db.DDL("""
+            INSERT INTO words (word)
+            SELECT word FROM ts_stat('
+              SELECT to_tsvector(''simple'', ccg_code) ||
+                     to_tsvector(''simple'', coalesce(ccg_name, '''')) ||
+                     to_tsvector(''simple'', stp_code) ||
+                     to_tsvector(''simple'', stp_cdh) ||
+                     to_tsvector(''simple'', coalesce(stp_name, '''')) ||
+                     to_tsvector(''simple'', region_code) ||
+                     to_tsvector(''simple'', region_cdh) ||
+                     to_tsvector(''simple'', coalesce(region_name, ''''))
+                FROM ccg_lookup
+            ');
+        """)
+        db.session.execute(add_words_snippet)
+        db.session.commit()
+        logger.info("Words added")
+    except Exception as e:
+        logger.info(e)
 
 
 @cli.command('add_words_index')
 def add_words_index():
-    add_words_index_snippet = db.DDL("""
-        CREATE EXTENSION pg_trgm;
-        CREATE INDEX IF NOT EXISTS location_search_word_trigram_index
-                ON words
-             USING gin (word gin_trgm_ops);
-    """)
-    db.session.execute(add_words_index_snippet)
-    db.session.commit()
+    try:
+        add_words_index_snippet = db.DDL("""
+            CREATE EXTENSION pg_trgm;
+            CREATE INDEX IF NOT EXISTS location_search_word_trigram_index
+                    ON words
+                 USING gin (word gin_trgm_ops);
+        """)
+        db.session.execute(add_words_index_snippet)
+        db.session.commit()
+    except Exception as e:
+        logger.info(e)
     logger.info("Words index added")
 
 
