@@ -1,3 +1,5 @@
+import logging
+
 from app import db
 
 
@@ -77,6 +79,9 @@ class AllTrustGeodata(db.Model):
             Latitude=Latitude,
             Longitude=Longitude
         )
-        db.session.add(trust_row)
-        db.session.commit()
+        try:
+            db.session.add(trust_row)
+            db.session.commit()
+        except Exception as e:
+            logging.info(e)
         return trust_row

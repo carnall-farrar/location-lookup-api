@@ -50,9 +50,11 @@ class CcgToStpLookup(db.Model):
             region_name=region_name,
             file=file
         )
-
-        db.session.add(lookup_row)
-        db.session.commit()
+        try:
+            db.session.add(lookup_row)
+            db.session.commit()
+        except Exception as e:
+            logger.info(e)
         return lookup_row
 
 
